@@ -13,11 +13,9 @@ import boto3
 import botocore
 import re
 
-star   = "STAR  --genomeDir /scratch/star_index --readFilesCommand zcat --outFilterMultimapNmax 1 --outReadsUnmapped Fastx  --outSAMtype BAM SortedByCoordinate  --two
-passMode Basic  --runThreadN 10 "
+star   = "STAR  --genomeDir /scratch/star_index --readFilesCommand zcat --outFilterMultimapNmax 1 --outReadsUnmapped Fastx  --outSAMtype BAM SortedByCoordinate  --twopassMode Basic  --runThreadN 10 "
 addRG0 = "java -Xmx20g -jar /picard/picard.jar AddOrReplaceReadGroups RGID=0 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample"
-rnaseqc = "java7 -Xmx20g -jar /NA_SeQC/RNA-SeQC_v1.1.8.jar  -singleEnd -r /scratch/ucsc_fa_hg19/hg19.fa -t /scratch/genecode_gtf_hg19/gencode.v19.annotation.gtf -rRNA
- /scratch/hg19_rRNA/hg19_rRNA.list " 
+rnaseqc = "java7 -Xmx20g -jar /NA_SeQC/RNA-SeQC_v1.1.8.jar  -singleEnd -r /scratch/ucsc_fa_hg19/hg19.fa -t /scratch/genecode_gtf_hg19/gencode.v19.annotation.gtf -rRNA /scratch/hg19_rRNA/hg19_rRNA.list " 
 
 
 def process_single_fq(infile):
@@ -118,6 +116,4 @@ with open(args.fq_filenames) as file:
             outfolder = sample+"_out"
             print("iploading results for {} to {} in s3 buckets: {}".format(sample, outfolder, args.output_bucket))
             upload_2_s3(infolder, args.output_bucket, outfolder)
-
-
 
