@@ -54,14 +54,23 @@ def get_args():
     args = parser.parse_args()
     return args    # args.fq_filenames, args.input_bucket, args.output_bucket
 
-def down_from_s3(sss, bucket, file):
+def down_from_s3(bucket, file):
+    s3 = boto3.resource('s3')
     try:
-        sss.Bucket(bucket).download_file(file, file)
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == "404":
-            print("{} in {} does not exist.".format(file, bucket))
-        else:
-            raise
+        input_bucket = s3.Bucket(bucket)
+        input_bucket.download_file(file, file)
+    except Exception as exception:
+        traceback.print_exc(file=sys.stdout)
+        print ("Error occur when creating thumbnail for {}/{}: {}".format(args.output_bucket, args.image_filename, exception))
+        exit(1)
+        
+#      try:
+#        sss.Bucket(bucket).download_file(file, file)
+#    except botocore.exceptions.ClientError as e:
+#        if e.response['Error']['Code'] == "404":
+#            print("{} in {} does not exist.".format(file, bucket))
+#        else:
+#            raise
 
 def upload_2_s3(local_directory, bucket, destination):
     client = boto3.client('s3')
@@ -83,9 +92,9 @@ args = get_args()
 
 print("start processing files in {} from {} ".format(args.fq_filenames, args.input_bucket))
 
-s3 = boto3.resource('s3')
+#s3 = boto3.resource('s3')
 
-down_from_s3(s3, args.input_bucket, args.fq_filenames)
+down_from_s3(args.input_bucket, args.fq_filenames)
 
 with open(args.fq_filenames) as file:
     if re.search("single", args.fq_filenames) :
