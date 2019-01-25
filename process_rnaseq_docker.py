@@ -101,7 +101,7 @@ with open(args.fq_filenames) as file:
         for line in file:
             line = line.rstrip() 
             print("downloading {} from {} ".format(line, args.input_bucket))
-            down_from_s3(s3, args.input_bucket, line)
+            down_from_s3(args.input_bucket, line)
             print("align and QC for reads in {} to reference uisng STAR ".format(line))
             process_single_fq(line)
             
@@ -115,8 +115,8 @@ with open(args.fq_filenames) as file:
             line = line.rstrip()
             temp = line.split("\t")
             print("downloading paired {} from {} ".format(line, args.input_bucket))
-            down_from_s3(s3, args.input_bucket, temp[0])
-            down_from_s3(s3, args.input_bucket, temp[1])
+            down_from_s3(args.input_bucket, temp[0])
+            down_from_s3(args.input_bucket, temp[1])
             print("align and QC for reads in {} and {}  to reference uisng STAR ".format(temp[0], temp[1]))
             process_paired_fq(temp[1], temp[1])
 
