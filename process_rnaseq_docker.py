@@ -61,7 +61,7 @@ def down_from_s3(bucket, file):
         input_bucket.download_file(file, file)
     except Exception as exception:
         traceback.print_exc(file=sys.stdout)
-        print ("Error occur when creating thumbnail for {}/{}: {}".format(args.output_bucket, args.image_filename, exception))
+        print ("Error occur when downing from s3)
         exit(1)
         
 #      try:
